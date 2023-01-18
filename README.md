@@ -1,32 +1,10 @@
-
-//This is the repository for solving coding challenge of AlgoCademy
-
 import java.io.BufferedReader;
-
 import java.io.InputStreamReader;
-
 import java.util.Arrays;
 
 public class MyClass {
     
-    // This method is to get an array which tells how many stars will be present in each row. Every index of an array 
-    // will tell then of starts in particular row 
-    public static int[] reverseArray(int a[],int n){
-        
-        int[] b = a;
-        int j = n-1;
-        System.out.println("\n n/2 is:" + n/2);
-        
-        for (int i = 0; i <n/2; i++) {
-            System.out.println("j" +j);
-            b[j] = a[i];
-            j = j - 1;
-        }
-        System.out.println("\n Before return b array is:" + Arrays.toString(b));     
-        return b;
-    }
-    
-    
+   
     public static void main(String args[]) {
       int totalRows=0;    
       String s="";
@@ -42,39 +20,60 @@ public class MyClass {
       totalRows = Integer.parseInt(s);
       System.out.println("Total Number of rows entered by user int: "+ totalRows);
    
-    // Declare array for total positive odd integer entered by user
-     int arr[] = new int[totalRows];
-    
-     // Create an array of odd integers
-     int cnt = 0;
-     for(cnt = 0; cnt !=totalRows; cnt++){
-         if ((2*cnt+1)>totalRows)  // Any number * 2 + 1 is always an odd number. 
-                  break;
-         else{
-             arr[cnt] = 2 * cnt + 1;
-         }
-        System.out.print("\t"+ arr[cnt]);
-    }
-    
-    // Reverese original array with length -1. This is required to get full array which gives number of starts to be printed in each row 
-        int b[] = reverseArray(arr, arr.length);
-        
-        arr = b; // reinitialising arr with full array for * printing 
      
      // This is actual for loop and logic to print the rhobus of * 
+     //int starCountInRow = 0;
+     int cursorStarCount = 0;
+     int minSize= totalRows/2;
+     int starArray[] = new int[100];  // array to maintain count of *'s in each row, will be updated run time and then will be traversed reverse as well 
+     int getStarsCount = 0;
+     boolean maxLimitReached = false;
      
-      for(int j=0; j<arr.length;j++){  
+      for(int j=0; j<totalRows;j++){  
+          // k is for printing * on each row and is set to 0 initially and will be calculated subsequently at run time like 1, 3, 5, 3
           int k=0;
-          // This gives the starts count to be printed in each row - based on index j 
-          int getStarsCount = arr[j];
-      
+          // This gives the stars count to be printed in each row - based on index j 
+           
+           if(!maxLimitReached){
+                int starCountInRow = j *2+1;
+                starArray[cursorStarCount] = starCountInRow; 
+                cursorStarCount++;
+                if(cursorStarCount>totalRows/2) 
+                    maxLimitReached = true;
+               
+           }
+            else { // since max limit of * is printed, so start reducing counter to get next actual stars in next each row 
+               
+               //Only once reduce the cursor by 2 and then subsequently by 1     1 3 5 3 1     1 3 5 7 9 7 5 3 1 
+               if (cursorStarCount> totalRows/2)
+                  cursorStarCount = cursorStarCount -2;
+                else{
+                    maxLimitReached = true;
+                    cursorStarCount = cursorStarCount -1;
+                
+                    
+                }
+            }    
+           /* keep on storing the count of * values in array using index j
+              until j <= totalRows/2. As soon as j becomes greater remember that 
+              maximum * row is printed. And we have to traverse array back 
+              to display lower part of Rhombus
+            */
+            if(j<=totalRows/2)
+              getStarsCount = starArray[j];  
+            else{
+                maxLimitReached = true;
+                getStarsCount = starArray[cursorStarCount];   
+            }
+              
+       
         //    System.out.println("Total star count:"+ getStarsCount);
           int spacesInRows = totalRows-getStarsCount;
         //  System.out.println("Total spaces in row:"+ spacesInRows +"\n");
           
         //  System.out.println("Starting row:"+ j);
         
-        // This is the counter for preceding and trailing spaces 
+        // This loop is for preceding spaces
           int spl=0;
           //This loop is for preceeding spaces
           for(spl=0; spl<spacesInRows /2 ;spl++){
@@ -85,10 +84,21 @@ public class MyClass {
             System.out.print("*");
             k++;
           }
-          //This loop is for following spaces
+          /* This loop is for following spaces. You can either use same variable spl and decrement it 
+             OR you can start again with fresh variable and display remaining trailing spaces with same for loop as above of preceding spaces 
+          */
+          
+        /*
           for(;spl>0;spl--){
             System.out.print(">");
           }
+        */ 
+          /* Use above for loop OR you can use below for loop with fresh variable for trailing spaces */
+          
+          for(spl=0;spl<spacesInRows/2;spl++){
+            System.out.print("<");     // changing this symbol to < from >, just for a different look 
+          }
+          
         System.out.println("");
       }   
     
