@@ -1,7 +1,10 @@
 
 //This is the repository for solving coding challenge of AlgoCademy
+
 import java.io.BufferedReader;
+
 import java.io.InputStreamReader;
+
 import java.util.Arrays;
 
 public class MyClass {
